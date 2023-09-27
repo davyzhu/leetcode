@@ -3,9 +3,9 @@ import 'dart:collection';
 const maxEnd = 10000000000;
 
 final class EntryItem extends LinkedListEntry<EntryItem> {
-  final int start;
-  final int end;
-  final int booking;
+  int start;
+  int end;
+  int booking;
 
   EntryItem(this.start, this.end, this.booking);
 
@@ -42,6 +42,30 @@ class MyCalendarTwo {
 
   void update(final int start, final int end) {
     assert(calendar.isNotEmpty);
+    for (EntryItem? e = calendar.first; e != null; e = e.next) {
+      if (isOverlap(e, start, end)) {
+        if (e.start < start && end < e.end) {
+          // case 1: split e into 3 new ranges by adding 2 new entry, middle one booking +1 
+          e.insertBefore(EntryItem(e.start, start, e.booking)); //left
+          e.insertBefore(EntryItem(start, end, e.booking + 1));//middle
+          e.start = end;
+        } else if (start <= e.start && e.end <= end) {
+          // case 2: update e's booking + 1
+          e.booking += 1;
+        } else if (e.start < start && e.end <= end) {
+          // case 3: split e into 2 new ranges, right booking +1 
+          e.insertBefore(EntryItem(e.start, start, e.booking)); //left
+          e.start = start;
+          e.booking += 1;
+        } else if (start <= e.start && end < e.end) {
+          // case 3: split e into 2 new ranges, left booking +1
+          e.insertBefore(EntryItem(e.start, end, e.booking+1)); //left
+          e.start = end;
+        } else {
+          assert(false,"Invalid case");
+        }
+      }
+    }
     
   }
 
