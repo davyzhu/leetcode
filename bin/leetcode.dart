@@ -1,7 +1,10 @@
+import 'dart:collection';
+
 void main() {
-  var s = '()()';
-  var s2 = s.split('').map((e) => (e == '(') ? 1 : -1);
-  for (var e in s2) {
-    print(e);
+  var s = 'leetcode';
+  var s2 = s.split('').map((e) => StringBuffer(e));
+  var q = Queue.of(s2);
+  for (var e in q) {
+    print(e.runtimeType);
   }
 }
