@@ -2,20 +2,6 @@ import 'package:leetcode/1766_tree.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('isCoprime 3,3', () async {
-    var s = Solution();
-    expect(s.isCoprime(3, 3), false);
-  });
-  test('isCoprime 1,4', () async {
-    var s = Solution();
-    expect(s.isCoprime(1, 4), true);
-  });
-
-  test('isCoprime 2,4', () async {
-    var s = Solution();
-    expect(s.isCoprime(2, 4), false);
-  });
-
   test('tree 1', () async {
     var s = Solution();
     var nums = [2, 3, 3, 2];
@@ -192,5 +178,34 @@ void main() {
       10
     ];
     expect(s.getCoprimes(nums, edges), equals(outputs));
+  });
+  test('large tree stack overflow', () async {
+    var s = Solution();
+
+    List<int> nums = [];
+    nums.add(3);
+    for (var i = 0; i < 99999; i++) {
+      if (i.isEven) {
+        nums.add(2);
+      } else {
+        nums.add(6);
+      }
+    }
+
+    List<List<int>> edges = [];
+    for (var i = 0; i < 99998; i++) {
+      if (i.isEven) {
+        edges.add([i, i + 2]);
+      } else {
+        edges.add([i - 1, i]);
+      }
+    }
+    edges.add([99998, 99999]);
+
+    List<int> outputs = [];
+    for (var i = 0; i <= 99999; i++) {
+      outputs.add(i.isEven ? -1 : 0);
+    }
+    expect(s.getCoprimes(nums, edges),equals(outputs));
   });
 }

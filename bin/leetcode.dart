@@ -1,5 +1,26 @@
 void main() {
-  createCoprime();
+  var edges = List<List<int>>.empty(growable: true);
+  for (var i = 0; i < 99998; i++) {
+    if (i.isEven) {
+      edges.add([i,i+2]);
+    } else {
+      edges.add([i-1,i]);
+    }
+  }
+  edges.add([99998,99999]);
+  print(edges.length);
+
+  var nums = List<int>.empty(growable: true);
+  nums.add(3);
+  for (var i = 0; i < 99999; i++) {
+    if (i.isEven) {
+      nums.add(2);
+    } else {
+      nums.add(6);
+    }
+  }
+  print(nums.length);
+
 }
 
 void createCoprime() {
