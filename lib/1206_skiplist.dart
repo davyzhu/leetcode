@@ -58,7 +58,7 @@ class Skiplist {
     }
     var newNode = SkipNode(_randHeight, num);
     for (var level = 0; level < newNode.height; level++) {
-      newNode.next[level] = last[level].next[level]; // TODO: level is 6, range is [0..5]
+      newNode.next[level] = last[level].next[level]; //
       last[level].next[level] = newNode;
     }
   }
