@@ -1,63 +1,78 @@
 import 'dart:collection';
+// 1st version: time=3376ms
+// 2nd version: time=484ms
+class FreqTime implements Comparable<FreqTime> {
+  final int val;
+  List<int> timeStack = [];
 
-class FreqStack {
-  final numFreq = HashMap<int, int>(); // num -> freq
-  final List<HashMap<int, List<int>>> freqNumTime = [];
-  var timer = 0;
-  FreqStack() {
-    freqNumTime.add(HashMap());
+  FreqTime(this.val);
+
+  void pushTimer(int timer) {
+    timeStack.add(timer);
   }
 
+  void popTimer() {
+    timeStack.removeLast();
+  }
+
+  int get freq {
+    return timeStack.length;
+  }
+
+  @override
+  int compareTo(other) {
+    if (freq > other.freq) {
+      return -1;
+    } else if (freq < other.freq) {
+      return 1;
+    } else {
+      if (timeStack.last > other.timeStack.last) {
+        return -1;
+      } else if (timeStack.last < other.timeStack.last) {
+        return 1;
+      } else {
+        return 0;
+      }
+    }
+  }
+
+  @override
+  String toString() {
+    return 'val[$val], time$timeStack';
+  }
+}
+
+class FreqStack {
+  final valFreqMap = HashMap<int, FreqTime>(); // val -> FreqTime
+  final freqTimeSet = SplayTreeSet<FreqTime>();
+  var timer = 0;
+  FreqStack();
+
   void push(int val) {
-    if (numFreq.containsKey(val)) {
-      numFreq[val] = numFreq[val]! + 1;
+    if (valFreqMap.containsKey(val)) {
+      var t = valFreqMap[val]!;
+      freqTimeSet.remove(t);
+      t.pushTimer(timer);
+      freqTimeSet.add(t);
     } else {
-      numFreq[val] = 1;
-    }
-    if (freqNumTime.length < numFreq[val]!) {
-      freqNumTime.add(HashMap());
-    }
-    final idx = numFreq[val]!;
-    if (idx == 1) {
-      freqNumTime[0][val] = [timer];
-    } else {
-      freqNumTime[idx - 1][val] = freqNumTime[idx - 2].remove(val)!;
-      freqNumTime[idx - 1][val]!.add(timer);
+      var t = FreqTime(val);
+      t.pushTimer(timer);
+      valFreqMap[val] = t;
+      freqTimeSet.add(t);
     }
     timer++;
   }
 
   int pop() {
-    var maxTime = -1;
-    var maxValue = -1;
-    for (var i = freqNumTime.length - 1; i >= 0; i--) {
-      if (freqNumTime[i].isNotEmpty) {
-        for (var e in freqNumTime[i].entries) {
-          final num = e.key;
-          final time = e.value;
-          if (time.last > maxTime) {
-            maxTime = time.last;
-            maxValue = num;
-          }
-        }
-
-        // change freq in numFreq
-        // remove time and change freq in freqNumTime
-        final freq = numFreq[maxValue]!;
-        if (freq == 1) {
-          numFreq.remove(maxValue);
-          freqNumTime[0].remove(maxValue);
-        } else {
-          assert(freq >= 2);
-          numFreq[maxValue] = freq - 1;
-          freqNumTime[freq - 1][maxValue]!.removeLast();
-          freqNumTime[freq - 2][maxValue] = freqNumTime[freq - 1].remove(maxValue)!;
-
-        }
-        return maxValue;
-      }
+    var result = freqTimeSet.first;
+    if (result.freq == 1) {
+      valFreqMap.remove(result.val);
+      freqTimeSet.remove(result);
+    } else {
+      freqTimeSet.remove(result);
+      result.popTimer();
+      freqTimeSet.add(result);
     }
-    assert(false);
-    return -1;
+    return result.val;
   }
 }

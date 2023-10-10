@@ -10,11 +10,17 @@ void main() {
     freqStack.push(7); // The stack is [5,7,5,7]
     freqStack.push(4); // The stack is [5,7,5,7,4]
     freqStack.push(5); // The stack is [5,7,5,7,4,5]
+    print(freqStack.freqTimeSet);
     expect(freqStack.pop(), equals(5));
+    print(freqStack.freqTimeSet);
     expect(freqStack.pop(), equals(7));
+    print(freqStack.freqTimeSet);
     expect(freqStack.pop(), equals(5));
+    print(freqStack.freqTimeSet);
     expect(freqStack.pop(), equals(4));
+    print(freqStack.freqTimeSet);
     expect(freqStack.pop(), equals(7));
+    print(freqStack.freqTimeSet);
     expect(freqStack.pop(), equals(5));
   });
 }
