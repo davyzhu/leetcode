@@ -8,4 +8,15 @@ void main() {
   test('anyOf', () async {
     expect('foo', anyOf([contains('bar'), contains('foo')]));
   });
+
+  test('unorderedEquals', () async {
+    expect([1, 2], unorderedEquals([1, 2]));
+    expect([2, 1], unorderedEquals([1, 2]));
+    expect([1, 2, 1], unorderedEquals([1, 1, 2]));
+  });
+
+  test('unorderedMatches', () async {
+    expect([1, 2, 1], unorderedMatches([greaterThan(0), greaterThan(0), greaterThan(1)]));
+  });
+
 }
