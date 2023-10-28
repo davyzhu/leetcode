@@ -35,6 +35,7 @@ class Solution {
             if ((t.time - trans[i].time).abs() <= 60 &&
                 t.city != trans[i].city) {
               trans[i].isInvalid = true;
+              t.isInvalid = true;
               break;
             }
           }
