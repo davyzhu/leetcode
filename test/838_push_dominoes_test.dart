@@ -117,7 +117,6 @@ void main() {
       var s = Solution();
       expect(s.pushDominoes(dominoes), "LL.R");
     });
-    
     test('.L.R.', () async {
       var dominoes = ".L.R.";
       var s = Solution();
